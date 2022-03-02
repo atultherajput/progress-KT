@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+option go_package = "./protos";
+
+package protos;
+
+import "google/api/annotations.proto";
+
+// The books service definition.
+service Books {
+    //CRUD for Book service
+    rpc GetAllBooks (NoParamRequest) returns (BooksResponse) {
+      option (google.api.http) = {
+              get: "/books"
+            };
+      // option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      //   summary: "Get all books"
+      //   description: "Get all books from the server."
+      //   tags: "Books"
+      // };
+    }
+    rpc GetBook (BookIdRequest) returns (BookRequestResponse) {
+      option (google.api.http) = {
+        get: "/books/{id}"
+      };
+      // option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      //   summary: "Get a book by id"
+      //   description: "Get a book by id from the server."
+      //   tags: "Books"
+      // };
+    }
+    rpc AddBook (BookRequestResponse) returns (TextResponse) {
+      option (google.api.http) = {
+        post: "/books"
+        body: "*"
+      };
+      // option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      //   summary: "Add a book"
+      //   description: "Add a book to the server."
+      //   tags: "Books"
+      // };
+    }
+    rpc DeleteBook (BookIdRequest) returns (TextResponse) {
+      option (google.api.http) = {
+        delete: "/books/{id}"
+      };
+      // option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      //   summary: "Delete a book by id"
+      //   description: "Delete a book from the server."
+      //   tags: "Books"
+      // };
+    }
+    rpc UpdateBook (BookUpdateRequest) returns (TextResponse) {
+      option (google.api.http) = {
+        put: "/books/{id}"
+        body: "book"
+      };
+      // option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      //   summary: "Update a book by id"
+      //   description: "Update a book from the server."
+      //   tags: "Books"
+      // };
+    }
+}
+
+message BookRequestResponse {
+  string title = 1;
+  string author = 2;
+  string desc = 3;
+}
+
+message BooksResponse{
+  repeated BookRequestResponse books = 1;
+}
+
+message BookIdRequest {
+  string id = 1;
+}
+
+message BookUpdateRequest {
+  string id = 1;
+  BookRequestResponse book = 2;
+}
+
+message TextResponse {
+  string message = 1;
+}
+
+// service has no input
+message NoParamRequest {}
